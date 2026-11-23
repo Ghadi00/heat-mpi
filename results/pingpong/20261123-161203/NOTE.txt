@@ -1,0 +1,1 @@
+Interrupted run (terminal froze). heat-ghadi stops at 1 MiB, heat-rim missing. Superseded by 2026-11-23/.
