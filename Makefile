@@ -6,7 +6,7 @@ MPICXX   ?= mpicxx
 CXXFLAGS ?= -O3 -std=c++17 -ffp-contract=off -Wall -Wextra -DOMPI_SKIP_MPICXX
 BUILD    := build
 
-PROGRAMS := $(BUILD)/hello $(BUILD)/pingpong
+PROGRAMS := $(BUILD)/heat $(BUILD)/hello $(BUILD)/pingpong
 
 all: $(PROGRAMS)
 

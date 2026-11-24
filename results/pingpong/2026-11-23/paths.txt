@@ -1,0 +1,8 @@
+== heat-lynn -> heat-ghadi
+pong from heat-ghadi (100.116.44.49) via 185.126.44.204:52753 in 320ms
+== heat-lynn -> heat-rim
+pong from heat-rim (100.100.147.92) via 185.72.218.110:5558 in 225ms
+== heat-ghadi -> heat-rim
+pong from heat-rim (100.100.147.92) via DERP(par) in 127ms
+pong from heat-rim (100.100.147.92) via DERP(par) in 355ms
+pong from heat-rim (100.100.147.92) via DERP(par) in 267ms

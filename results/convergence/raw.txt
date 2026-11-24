@@ -1,0 +1,5 @@
+decomp=serial P=1 case=V N=16 steps=64 r=0.2 dt=7.812500e-04 T=0.05 t_total=0.000032 t_comp=0.000032 t_comm=0.000000 err_inf=1.663371e-03 err_2h=8.316853e-04
+decomp=serial P=1 case=V N=32 steps=256 r=0.2 dt=1.953125e-04 T=0.05 t_total=0.000396 t_comp=0.000396 t_comm=0.000000 err_inf=4.141824e-04 err_2h=2.070912e-04
+decomp=serial P=1 case=V N=64 steps=1024 r=0.2 dt=4.882813e-05 T=0.05 t_total=0.006195 t_comp=0.006195 t_comm=0.000000 err_inf=1.034425e-04 err_2h=5.172124e-05
+decomp=serial P=1 case=V N=128 steps=4096 r=0.2 dt=1.220703e-05 T=0.05 t_total=0.052485 t_comp=0.052485 t_comm=0.000000 err_inf=2.585419e-05 err_2h=1.292709e-05
+decomp=serial P=1 case=V N=256 steps=16384 r=0.2 dt=3.051758e-06 T=0.05 t_total=1.350965 t_comp=1.350965 t_comm=0.000000 err_inf=6.463145e-06 err_2h=3.231572e-06
