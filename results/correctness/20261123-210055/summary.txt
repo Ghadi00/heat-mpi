@@ -1,0 +1,39 @@
+date: 2026-11-23T21:00:55+00:00
+where: cluster (heat-lynn heat-ghadi heat-rim)
+commit: 00ad247
+cases=[1 2 V] N=[8 17 64 101] P=[1 2 3 4] decomps=[strips] halos=[shift] steps=20 r=0.24
+
+case  N     decomp   halo   P   result
+1     8     strips   shift  1   IDENTICAL
+1     8     strips   shift  2   DIFFERENT
+1     8     strips   shift  3   DIFFERENT
+1     8     strips   shift  4   DIFFERENT
+1     17    strips   shift  1   IDENTICAL
+1     17    strips   shift  2   DIFFERENT
+1     17    strips   shift  3   DIFFERENT
+1     17    strips   shift  4   DIFFERENT
+1     64    strips   shift  1   IDENTICAL
+1     64    strips   shift  2   DIFFERENT
+1     64    strips   shift  3   DIFFERENT
+1     64    strips   shift  4   DIFFERENT
+1     101   strips   shift  1   IDENTICAL
+1     101   strips   shift  2   DIFFERENT
+1     101   strips   shift  3   DIFFERENT
+1     101   strips   shift  4   DIFFERENT
+2     8     strips   shift  1   IDENTICAL
+2     8     strips   shift  2   DIFFERENT
+2     8     strips   shift  3   DIFFERENT
+2     8     strips   shift  4   DIFFERENT
+2     17    strips   shift  1   IDENTICAL
+2     17    strips   shift  2   DIFFERENT
+2     17    strips   shift  3   DIFFERENT
+2     17    strips   shift  4   DIFFERENT
+2     64    strips   shift  1   IDENTICAL
+2     64    strips   shift  2   DIFFERENT
+2     64    strips   shift  3   DIFFERENT
+2     64    strips   shift  4   DIFFERENT
+2     101   strips   shift  1   DIFFERENT
+2     101   strips   shift  2   DIFFERENT
+2     101   strips   shift  3   DIFFERENT
+2     101   strips   shift  4   DIFFERENT
+V     8     strips   shift  1   IDENTICAL

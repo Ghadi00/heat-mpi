@@ -1,0 +1,10 @@
+lynn and rim on the same phone hotspot, Ghadi on his own hotspot
+
+== heat-lynn -> heat-ghadi
+pong from heat-ghadi (100.116.44.49) via DERP(par) in 239ms
+pong from heat-ghadi (100.116.44.49) via DERP(par) in 250ms
+== heat-lynn -> heat-rim
+pong from heat-rim (100.100.147.92) via 91.197.47.162:52022 in 107ms
+== heat-ghadi -> heat-rim
+pong from heat-rim (100.100.147.92) via DERP(par) in 250ms
+pong from heat-rim (100.100.147.92) via DERP(par) in 219ms

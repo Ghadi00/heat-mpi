@@ -1,0 +1,39 @@
+date: 2026-11-23T21:09:45+00:00
+where: cluster (heat-lynn heat-ghadi heat-rim)
+commit: 00ad247
+cases=[1 2 V] N=[8 17 64 101] P=[1 2 3 4] decomps=[strips] halos=[shift] steps=20 r=0.24
+
+$ heat --case 1 --N 8 --r 0.24 --steps 20 --decomp serial
+decomp=serial P=1 N=8 steps=20 t_total=0.000003 t_comp=0.000003 t_comm=0.000000 case=1 r=0.24 dt=3.750000e-03 T=0.075
+$ mpirun -np 1 heat --case 1 --N 8 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=1 N=8 steps=20 t_total=0.000007 t_comp=0.000003 t_comm=0.000003 case=1 r=0.24 dt=3.750000e-03 T=0.075 halo=shift
+$ mpirun -np 2 heat --case 1 --N 8 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=2 N=8 steps=20 t_total=5.802573 t_comp=0.000019 t_comm=5.802552 case=1 r=0.24 dt=3.750000e-03 T=0.075 halo=shift
+$ mpirun -np 3 heat --case 1 --N 8 --r 0.24 --steps 20 --decomp strips --halo shift
+--------------------------------------------------------------------------
+ORTE has lost communication with a remote daemon.
+
+  HNP daemon   : [[42470,0],0] on node heat-lynn
+  Remote daemon: [[42470,0],1] on node heat-ghadi
+
+This is usually due to either a failure of the TCP network
+connection to the node, or possibly an internal failure of
+the daemon itself. We cannot recover from this failure, and
+therefore will terminate the job.
+--------------------------------------------------------------------------
+cmp: /home/mpi/heat-mpi/results/correctness/20261123-210945/fields/strips_shift_c1_N8_P3.bin: No such file or directory
+$ mpirun -np 4 heat --case 1 --N 8 --r 0.24 --steps 20 --decomp strips --halo shift
+mpirun: Forwarding signal 20 to job
+--------------------------------------------------------------------------
+ORTE does not know how to route a message to the specified daemon
+located on the indicated node:
+
+  my node:   heat-lynn
+  target node:  heat-ghadi
+
+This is usually an internal programming error that should be
+reported to the developers. In the meantime, a workaround may
+be to set the MCA param routed=direct on the command line or
+in your environment. We apologize for the problem.
+--------------------------------------------------------------------------
+ssh: connect to host heat-ghadi port 22: Connection timed out
