@@ -23,8 +23,8 @@ are bit-for-bit reproducible).
 | `--T` | final time; ∆t is chosen so T/∆t is an integer and r is not exceeded | `--T 0.05` |
 | `--steps` | fixed number of steps instead of `--T` (∆t = r h²) | `--steps 500` |
 | `--out` | write the final field: (N+1)² raw little-endian doubles, row-major, row j = line y = y_j, no header | `--out u.bin` |
-| `--decomp` | `serial` (1 process, reference) or `strips` (Part 2); `blocks` comes in Part 3 | `--decomp strips` |
-| `--halo` | strips only: `shift` (default; every rank sends up, then every rank sends down) or `pair` (exchange with the upper neighbour, then the lower; the order written in the brief, slower for large P) | `--halo pair` |
+| `--decomp` | `serial` (1 process, reference), `strips` (Part 2, 1D row strips) or `blocks` (Part 3, Px × Py grid chosen by `MPI_Dims_create`; printed as `Px=`/`Py=` in the summary) | `--decomp blocks` |
+| `--halo` | strips only (blocks always use the shift order): `shift` (default; every rank sends up, then every rank sends down) or `pair` (exchange with the upper neighbour, then the lower; the order written in the brief, slower for large P) | `--halo pair` |
 | `--print` | debug: print every rank's local array including ghost rows, in rank order | |
 | `--allow-unstable` | run even if r > 1/4 (only for Task 6.7) | |
 
@@ -34,8 +34,8 @@ pairs, e.g.
     decomp=serial P=1 case=V N=64 steps=1024 r=0.2 dt=4.882813e-05 T=0.05 t_total=0.002 t_comp=0.002 t_comm=0 err_inf=1.03e-04 err_2h=5.17e-05
 
 (`err_inf`, `err_2h` only for case V). Times cover the time-stepping loop only;
-in parallel each is the maximum over ranks. With `--decomp strips`, the field
-is gathered on rank 0 only when `--out` is given.
+in parallel each is the maximum over ranks. With `--decomp strips` or `blocks`, the
+field is gathered on rank 0 only when `--out` is given.
 
 Running the strip version across the cluster:
 
@@ -47,7 +47,7 @@ Running the strip version across the cluster:
 Helpers:
 
     python3 scripts/convergence.py            # Task 7.2 table + plot -> results/convergence/
-    scripts/check_correctness.sh              # serial vs strips, bit-for-bit (cmp), on this VM
+    scripts/check_correctness.sh              # serial vs strips and blocks, bit-for-bit (cmp), on this VM
     CLUSTER=1 scripts/check_correctness.sh    # the same across the VMs in ./hosts
     python3 scripts/plot_field.py u.bin       # heat map -> u.png
 

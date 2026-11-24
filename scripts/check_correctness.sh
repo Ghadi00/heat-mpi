@@ -11,8 +11,9 @@
 #   CASES    test cases                    ["1 2 V"]
 #   NS       grid sizes N                  ["8 17 64 101"]
 #            (N-1 = 7, 16, 63, 100: divisible and not divisible by P = 2, 3, 4)
-#   PS       process counts                ["1 2 3 4"]
-#   DECOMPS  parallel decompositions       ["strips"]   (add "blocks" in Part 3)
+#   PS       process counts                ["1 2 3 4 6"]
+#            (blocks: 4 -> 2x2, 6 -> 3x2, i.e. a real 2D grid)
+#   DECOMPS  parallel decompositions       ["strips blocks"]
 #   HALOS    halo variants for strips      ["shift pair"]
 #   STEPS    time steps per run            [50]
 #   R        alpha dt / h^2                [0.24]
@@ -23,14 +24,16 @@
 # Output: results/correctness/<date-time>/log.txt and summary.txt.
 # Exit status 0 only if every comparison passed.
 set -uo pipefail
+# mpirun catches Ctrl+C and just returns an error, so without this trap the
+# loop would carry on with the next run. Stop the whole script instead.
 trap 'echo; echo "interrupted"; pkill -P $$ mpirun 2>/dev/null; exit 130' INT TERM
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 HEAT="$ROOT/build/heat"
 CASES="${CASES:-1 2 V}"
 NS="${NS:-8 17 64 101}"
-PS="${PS:-1 2 3 4}"
-DECOMPS="${DECOMPS:-strips}"
+PS="${PS:-1 2 3 4 6}"
+DECOMPS="${DECOMPS:-strips blocks}"
 HALOS="${HALOS:-shift pair}"
 STEPS="${STEPS:-50}"
 R="${R:-0.24}"
