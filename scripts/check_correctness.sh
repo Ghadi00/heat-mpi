@@ -23,6 +23,7 @@
 # Output: results/correctness/<date-time>/log.txt and summary.txt.
 # Exit status 0 only if every comparison passed.
 set -uo pipefail
+trap 'echo; echo "interrupted"; pkill -P $$ mpirun 2>/dev/null; exit 130' INT TERM
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 HEAT="$ROOT/build/heat"
