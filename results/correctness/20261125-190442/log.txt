@@ -1,0 +1,150 @@
+date: 2026-11-25T19:04:42+00:00
+where: cluster (heat-lynn heat-ghadi heat-rim)
+commit: c915beb
+cases=[1 2 V] N=[8 17 64 101] P=[1 2 3 4 6] decomps=[strips] halos=[shift] steps=20 r=0.24
+
+$ heat --case 1 --N 8 --r 0.24 --steps 20 --decomp serial
+decomp=serial P=1 N=8 steps=20 t_total=0.000002 t_comp=0.000002 t_comm=0.000000 case=1 r=0.24 dt=3.750000e-03 T=0.075
+$ mpirun -np 1 heat --case 1 --N 8 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=1 N=8 steps=20 t_total=0.000009 t_comp=0.000004 t_comm=0.000003 case=1 r=0.24 dt=3.750000e-03 T=0.075 halo=shift
+$ mpirun -np 2 heat --case 1 --N 8 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=2 N=8 steps=20 t_total=7.420833 t_comp=0.000015 t_comm=7.420817 case=1 r=0.24 dt=3.750000e-03 T=0.075 halo=shift
+$ mpirun -np 3 heat --case 1 --N 8 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=3 N=8 steps=20 t_total=8.756600 t_comp=0.000017 t_comm=8.756594 case=1 r=0.24 dt=3.750000e-03 T=0.075 halo=shift
+$ mpirun -np 4 heat --case 1 --N 8 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=4 N=8 steps=20 t_total=9.316461 t_comp=0.000023 t_comm=9.316446 case=1 r=0.24 dt=3.750000e-03 T=0.075 halo=shift
+$ mpirun -np 6 heat --case 1 --N 8 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=6 N=8 steps=20 t_total=12.830405 t_comp=0.000016 t_comm=12.830387 case=1 r=0.24 dt=3.750000e-03 T=0.075 halo=shift
+$ heat --case 1 --N 17 --r 0.24 --steps 20 --decomp serial
+decomp=serial P=1 N=17 steps=20 t_total=0.000010 t_comp=0.000010 t_comm=0.000000 case=1 r=0.24 dt=8.304498e-04 T=0.016609
+$ mpirun -np 1 heat --case 1 --N 17 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=1 N=17 steps=20 t_total=0.000015 t_comp=0.000010 t_comm=0.000003 case=1 r=0.24 dt=8.304498e-04 T=0.016609 halo=shift
+$ mpirun -np 2 heat --case 1 --N 17 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=2 N=17 steps=20 t_total=12.683130 t_comp=0.000019 t_comm=12.683110 case=1 r=0.24 dt=8.304498e-04 T=0.016609 halo=shift
+$ mpirun -np 3 heat --case 1 --N 17 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=3 N=17 steps=20 t_total=9.910126 t_comp=0.000018 t_comm=9.910118 case=1 r=0.24 dt=8.304498e-04 T=0.016609 halo=shift
+$ mpirun -np 4 heat --case 1 --N 17 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=4 N=17 steps=20 t_total=7.197127 t_comp=0.000119 t_comm=7.197109 case=1 r=0.24 dt=8.304498e-04 T=0.016609 halo=shift
+$ mpirun -np 6 heat --case 1 --N 17 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=6 N=17 steps=20 t_total=10.134201 t_comp=0.000019 t_comm=10.134185 case=1 r=0.24 dt=8.304498e-04 T=0.016609 halo=shift
+$ heat --case 1 --N 64 --r 0.24 --steps 20 --decomp serial
+decomp=serial P=1 N=64 steps=20 t_total=0.000139 t_comp=0.000139 t_comm=0.000000 case=1 r=0.24 dt=5.859375e-05 T=0.00117187
+$ mpirun -np 1 heat --case 1 --N 64 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=1 N=64 steps=20 t_total=0.000120 t_comp=0.000115 t_comm=0.000003 case=1 r=0.24 dt=5.859375e-05 T=0.00117187 halo=shift
+$ mpirun -np 2 heat --case 1 --N 64 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=2 N=64 steps=20 t_total=8.162195 t_comp=0.000208 t_comm=8.161984 case=1 r=0.24 dt=5.859375e-05 T=0.00117187 halo=shift
+$ mpirun -np 3 heat --case 1 --N 64 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=3 N=64 steps=20 t_total=9.168741 t_comp=0.000078 t_comm=9.168683 case=1 r=0.24 dt=5.859375e-05 T=0.00117187 halo=shift
+$ mpirun -np 4 heat --case 1 --N 64 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=4 N=64 steps=20 t_total=8.108195 t_comp=0.000087 t_comm=8.108147 case=1 r=0.24 dt=5.859375e-05 T=0.00117187 halo=shift
+$ mpirun -np 6 heat --case 1 --N 64 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=6 N=64 steps=20 t_total=7.493905 t_comp=0.000150 t_comm=7.493861 case=1 r=0.24 dt=5.859375e-05 T=0.00117187 halo=shift
+$ heat --case 1 --N 101 --r 0.24 --steps 20 --decomp serial
+decomp=serial P=1 N=101 steps=20 t_total=0.000635 t_comp=0.000635 t_comm=0.000000 case=1 r=0.24 dt=2.352711e-05 T=0.000470542
+$ mpirun -np 1 heat --case 1 --N 101 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=1 N=101 steps=20 t_total=0.000284 t_comp=0.000272 t_comm=0.000005 case=1 r=0.24 dt=2.352711e-05 T=0.000470542 halo=shift
+$ mpirun -np 2 heat --case 1 --N 101 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=2 N=101 steps=20 t_total=1.567069 t_comp=0.000215 t_comm=1.566853 case=1 r=0.24 dt=2.352711e-05 T=0.000470542 halo=shift
+$ mpirun -np 3 heat --case 1 --N 101 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=3 N=101 steps=20 t_total=2.675247 t_comp=0.000143 t_comm=2.675103 case=1 r=0.24 dt=2.352711e-05 T=0.000470542 halo=shift
+$ mpirun -np 4 heat --case 1 --N 101 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=4 N=101 steps=20 t_total=9.270093 t_comp=0.000194 t_comm=9.270000 case=1 r=0.24 dt=2.352711e-05 T=0.000470542 halo=shift
+$ mpirun -np 6 heat --case 1 --N 101 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=6 N=101 steps=20 t_total=7.750021 t_comp=0.000126 t_comm=7.749966 case=1 r=0.24 dt=2.352711e-05 T=0.000470542 halo=shift
+$ heat --case 2 --N 8 --r 0.24 --steps 20 --decomp serial
+decomp=serial P=1 N=8 steps=20 t_total=0.000003 t_comp=0.000003 t_comm=0.000000 case=2 r=0.24 dt=3.750000e-03 T=0.075
+$ mpirun -np 1 heat --case 2 --N 8 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=1 N=8 steps=20 t_total=0.000006 t_comp=0.000003 t_comm=0.000002 case=2 r=0.24 dt=3.750000e-03 T=0.075 halo=shift
+$ mpirun -np 2 heat --case 2 --N 8 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=2 N=8 steps=20 t_total=4.576352 t_comp=0.000020 t_comm=4.576330 case=2 r=0.24 dt=3.750000e-03 T=0.075 halo=shift
+$ mpirun -np 3 heat --case 2 --N 8 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=3 N=8 steps=20 t_total=1.750242 t_comp=0.000015 t_comm=1.750237 case=2 r=0.24 dt=3.750000e-03 T=0.075 halo=shift
+$ mpirun -np 4 heat --case 2 --N 8 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=4 N=8 steps=20 t_total=4.003738 t_comp=0.000016 t_comm=4.003726 case=2 r=0.24 dt=3.750000e-03 T=0.075 halo=shift
+$ mpirun -np 6 heat --case 2 --N 8 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=6 N=8 steps=20 t_total=3.154953 t_comp=0.000138 t_comm=3.154814 case=2 r=0.24 dt=3.750000e-03 T=0.075 halo=shift
+$ heat --case 2 --N 17 --r 0.24 --steps 20 --decomp serial
+decomp=serial P=1 N=17 steps=20 t_total=0.000007 t_comp=0.000007 t_comm=0.000000 case=2 r=0.24 dt=8.304498e-04 T=0.016609
+$ mpirun -np 1 heat --case 2 --N 17 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=1 N=17 steps=20 t_total=0.000012 t_comp=0.000008 t_comm=0.000002 case=2 r=0.24 dt=8.304498e-04 T=0.016609 halo=shift
+$ mpirun -np 2 heat --case 2 --N 17 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=2 N=17 steps=20 t_total=1.138331 t_comp=0.000019 t_comm=1.138311 case=2 r=0.24 dt=8.304498e-04 T=0.016609 halo=shift
+$ mpirun -np 3 heat --case 2 --N 17 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=3 N=17 steps=20 t_total=1.861228 t_comp=0.000020 t_comm=1.861221 case=2 r=0.24 dt=8.304498e-04 T=0.016609 halo=shift
+$ mpirun -np 4 heat --case 2 --N 17 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=4 N=17 steps=20 t_total=3.604604 t_comp=0.000018 t_comm=3.604586 case=2 r=0.24 dt=8.304498e-04 T=0.016609 halo=shift
+$ mpirun -np 6 heat --case 2 --N 17 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=6 N=17 steps=20 t_total=2.970132 t_comp=0.000248 t_comm=2.969882 case=2 r=0.24 dt=8.304498e-04 T=0.016609 halo=shift
+$ heat --case 2 --N 64 --r 0.24 --steps 20 --decomp serial
+decomp=serial P=1 N=64 steps=20 t_total=0.000062 t_comp=0.000062 t_comm=0.000000 case=2 r=0.24 dt=5.859375e-05 T=0.00117187
+$ mpirun -np 1 heat --case 2 --N 64 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=1 N=64 steps=20 t_total=0.000138 t_comp=0.000132 t_comm=0.000003 case=2 r=0.24 dt=5.859375e-05 T=0.00117187 halo=shift
+$ mpirun -np 2 heat --case 2 --N 64 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=2 N=64 steps=20 t_total=1.916477 t_comp=0.000131 t_comm=1.916344 case=2 r=0.24 dt=5.859375e-05 T=0.00117187 halo=shift
+$ mpirun -np 3 heat --case 2 --N 64 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=3 N=64 steps=20 t_total=1.524467 t_comp=0.000053 t_comm=1.524445 case=2 r=0.24 dt=5.859375e-05 T=0.00117187 halo=shift
+$ mpirun -np 4 heat --case 2 --N 64 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=4 N=64 steps=20 t_total=3.887128 t_comp=0.000100 t_comm=3.887089 case=2 r=0.24 dt=5.859375e-05 T=0.00117187 halo=shift
+$ mpirun -np 6 heat --case 2 --N 64 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=6 N=64 steps=20 t_total=4.351494 t_comp=0.000040 t_comm=4.351457 case=2 r=0.24 dt=5.859375e-05 T=0.00117187 halo=shift
+$ heat --case 2 --N 101 --r 0.24 --steps 20 --decomp serial
+decomp=serial P=1 N=101 steps=20 t_total=0.000736 t_comp=0.000736 t_comm=0.000000 case=2 r=0.24 dt=2.352711e-05 T=0.000470542
+$ mpirun -np 1 heat --case 2 --N 101 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=1 N=101 steps=20 t_total=0.000550 t_comp=0.000544 t_comm=0.000004 case=2 r=0.24 dt=2.352711e-05 T=0.000470542 halo=shift
+$ mpirun -np 2 heat --case 2 --N 101 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=2 N=101 steps=20 t_total=1.679005 t_comp=0.000180 t_comm=1.678824 case=2 r=0.24 dt=2.352711e-05 T=0.000470542 halo=shift
+$ mpirun -np 3 heat --case 2 --N 101 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=3 N=101 steps=20 t_total=2.268476 t_comp=0.000194 t_comm=2.268407 case=2 r=0.24 dt=2.352711e-05 T=0.000470542 halo=shift
+$ mpirun -np 4 heat --case 2 --N 101 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=4 N=101 steps=20 t_total=7.885877 t_comp=0.000952 t_comm=7.884922 case=2 r=0.24 dt=2.352711e-05 T=0.000470542 halo=shift
+$ mpirun -np 6 heat --case 2 --N 101 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=6 N=101 steps=20 t_total=3.184888 t_comp=0.000239 t_comm=3.184834 case=2 r=0.24 dt=2.352711e-05 T=0.000470542 halo=shift
+$ heat --case V --N 8 --r 0.24 --steps 20 --decomp serial
+decomp=serial P=1 N=8 steps=20 t_total=0.000003 t_comp=0.000003 t_comm=0.000000 case=V r=0.24 dt=3.750000e-03 T=0.075 err_inf=8.314543e-03 err_2h=4.157271e-03
+$ mpirun -np 1 heat --case V --N 8 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=1 N=8 steps=20 t_total=0.000011 t_comp=0.000005 t_comm=0.000004 case=V r=0.24 dt=3.750000e-03 T=0.075 halo=shift err_inf=8.314543e-03 err_2h=4.157271e-03
+$ mpirun -np 2 heat --case V --N 8 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=2 N=8 steps=20 t_total=1.793101 t_comp=0.000016 t_comm=1.793084 case=V r=0.24 dt=3.750000e-03 T=0.075 halo=shift err_inf=8.314543e-03 err_2h=4.157271e-03
+$ mpirun -np 3 heat --case V --N 8 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=3 N=8 steps=20 t_total=2.920197 t_comp=0.000016 t_comm=2.920192 case=V r=0.24 dt=3.750000e-03 T=0.075 halo=shift err_inf=8.314543e-03 err_2h=4.157271e-03
+$ mpirun -np 4 heat --case V --N 8 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=4 N=8 steps=20 t_total=8.191359 t_comp=0.000021 t_comm=8.191345 case=V r=0.24 dt=3.750000e-03 T=0.075 halo=shift err_inf=8.314543e-03 err_2h=4.157271e-03
+$ mpirun -np 6 heat --case V --N 8 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=6 N=8 steps=20 t_total=2.014529 t_comp=0.000041 t_comm=2.014513 case=V r=0.24 dt=3.750000e-03 T=0.075 halo=shift err_inf=8.314543e-03 err_2h=4.157271e-03
+$ heat --case V --N 17 --r 0.24 --steps 20 --decomp serial
+decomp=serial P=1 N=17 steps=20 t_total=0.000009 t_comp=0.000009 t_comm=0.000000 case=V r=0.24 dt=8.304498e-04 T=0.016609 err_inf=1.262813e-03 err_2h=6.368283e-04
+$ mpirun -np 1 heat --case V --N 17 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=1 N=17 steps=20 t_total=0.000015 t_comp=0.000010 t_comm=0.000003 case=V r=0.24 dt=8.304498e-04 T=0.016609 halo=shift err_inf=1.262813e-03 err_2h=6.368283e-04
+$ mpirun -np 2 heat --case V --N 17 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=2 N=17 steps=20 t_total=1.274282 t_comp=0.000021 t_comm=1.274260 case=V r=0.24 dt=8.304498e-04 T=0.016609 halo=shift err_inf=1.262813e-03 err_2h=6.368283e-04
+$ mpirun -np 3 heat --case V --N 17 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=3 N=17 steps=20 t_total=1.330884 t_comp=0.000023 t_comm=1.330874 case=V r=0.24 dt=8.304498e-04 T=0.016609 halo=shift err_inf=1.262813e-03 err_2h=6.368283e-04
+$ mpirun -np 4 heat --case V --N 17 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=4 N=17 steps=20 t_total=5.216781 t_comp=0.000021 t_comm=5.216767 case=V r=0.24 dt=8.304498e-04 T=0.016609 halo=shift err_inf=1.262813e-03 err_2h=6.368283e-04
+$ mpirun -np 6 heat --case V --N 17 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=6 N=17 steps=20 t_total=5.793812 t_comp=0.000019 t_comm=5.793792 case=V r=0.24 dt=8.304498e-04 T=0.016609 halo=shift err_inf=1.262813e-03 err_2h=6.368283e-04
+$ heat --case V --N 64 --r 0.24 --steps 20 --decomp serial
+decomp=serial P=1 N=64 steps=20 t_total=0.000119 t_comp=0.000119 t_comm=0.000000 case=V r=0.24 dt=5.859375e-05 T=0.00117187 err_inf=8.537760e-06 err_2h=4.268880e-06
+$ mpirun -np 1 heat --case V --N 64 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=1 N=64 steps=20 t_total=0.000130 t_comp=0.000124 t_comm=0.000004 case=V r=0.24 dt=5.859375e-05 T=0.00117187 halo=shift err_inf=8.537760e-06 err_2h=4.268880e-06
+$ mpirun -np 2 heat --case V --N 64 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=2 N=64 steps=20 t_total=1.519559 t_comp=0.000372 t_comm=1.519185 case=V r=0.24 dt=5.859375e-05 T=0.00117187 halo=shift err_inf=8.537760e-06 err_2h=4.268880e-06
+$ mpirun -np 3 heat --case V --N 64 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=3 N=64 steps=20 t_total=2.358662 t_comp=0.000107 t_comm=2.358554 case=V r=0.24 dt=5.859375e-05 T=0.00117187 halo=shift err_inf=8.537760e-06 err_2h=4.268880e-06
+$ mpirun -np 4 heat --case V --N 64 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=4 N=64 steps=20 t_total=4.923035 t_comp=0.000347 t_comm=4.922685 case=V r=0.24 dt=5.859375e-05 T=0.00117187 halo=shift err_inf=8.537760e-06 err_2h=4.268880e-06
+$ mpirun -np 6 heat --case V --N 64 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=6 N=64 steps=20 t_total=3.551409 t_comp=0.000329 t_comm=3.551371 case=V r=0.24 dt=5.859375e-05 T=0.00117187 halo=shift err_inf=8.537760e-06 err_2h=4.268880e-06
+$ heat --case V --N 101 --r 0.24 --steps 20 --decomp serial
+decomp=serial P=1 N=101 steps=20 t_total=0.000231 t_comp=0.000231 t_comm=0.000000 case=V r=0.24 dt=2.352711e-05 T=0.000470542 err_inf=1.394854e-06 err_2h=6.975959e-07
+$ mpirun -np 1 heat --case V --N 101 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=1 N=101 steps=20 t_total=0.000289 t_comp=0.000284 t_comm=0.000003 case=V r=0.24 dt=2.352711e-05 T=0.000470542 halo=shift err_inf=1.394854e-06 err_2h=6.975959e-07
+$ mpirun -np 2 heat --case V --N 101 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=2 N=101 steps=20 t_total=2.398448 t_comp=0.000213 t_comm=2.398233 case=V r=0.24 dt=2.352711e-05 T=0.000470542 halo=shift err_inf=1.394854e-06 err_2h=6.975959e-07
+$ mpirun -np 3 heat --case V --N 101 --r 0.24 --steps 20 --decomp strips --halo shift
+[heat-lynn:04563] plm:rsh: Warning: setpgid(4567,4567) failed in parent with errno=Permission denied(13)
+decomp=strips P=3 N=101 steps=20 t_total=3.385857 t_comp=0.000133 t_comm=3.385754 case=V r=0.24 dt=2.352711e-05 T=0.000470542 halo=shift err_inf=1.394854e-06 err_2h=6.975959e-07
+$ mpirun -np 4 heat --case V --N 101 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=4 N=101 steps=20 t_total=2.602321 t_comp=0.000233 t_comm=2.602085 case=V r=0.24 dt=2.352711e-05 T=0.000470542 halo=shift err_inf=1.394854e-06 err_2h=6.975959e-07
+$ mpirun -np 6 heat --case V --N 101 --r 0.24 --steps 20 --decomp strips --halo shift
+decomp=strips P=6 N=101 steps=20 t_total=5.596185 t_comp=0.000184 t_comm=5.596113 case=V r=0.24 dt=2.352711e-05 T=0.000470542 halo=shift err_inf=1.394854e-06 err_2h=6.975959e-07

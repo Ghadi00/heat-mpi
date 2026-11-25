@@ -1,0 +1,4 @@
+Strips correctness run (P=1-6), 2026-11-25 evening, all 3 VMs, each at home on own Wi-Fi.
+100.91.244.125  heat-lynn   lynnmechreck1@  linux  -                                                           
+100.116.44.49   heat-ghadi  ghadikriko12@   linux  active; direct 185.126.44.204:50180, tx 1484224 rx 1943640  
+100.100.147.92  heat-rim    abboudrim1@     linux  active; direct 185.72.218.110:3578, tx 1053928 rx 1216792   
