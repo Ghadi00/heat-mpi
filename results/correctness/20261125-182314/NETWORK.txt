@@ -1,0 +1,4 @@
+Blocks correctness run, 2026-11-25 evening, all 3 VMs, each of us at home on our own Wi-Fi.
+100.91.244.125  heat-lynn   lynnmechreck1@  linux  -                            
+100.116.44.49   heat-ghadi  ghadikriko12@   linux  idle, tx 1484216 rx 1881356  
+100.100.147.92  heat-rim    abboudrim1@     linux  idle, tx 1486896 rx 1537448  
