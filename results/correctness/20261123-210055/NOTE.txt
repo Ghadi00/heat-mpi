@@ -1,0 +1,1 @@
+Interrupted. Not a code failure: heat-ghadi was on the 'ghadi' branch, so build/heat did not exist there.

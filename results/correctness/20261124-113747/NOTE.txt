@@ -1,0 +1,1 @@
+All runs failed to start. Not a code failure: university Wi-Fi blocked Tailscale, heat-lynn could not resolve heat-rim. Repeated successfully in 20261124-121917.
