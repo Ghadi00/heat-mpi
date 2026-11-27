@@ -79,3 +79,37 @@ Helpers:
 ## LLM use
 
 See `CLAUDE.md` (also used as `AGENTS.md`) and the `llm_log/` folder.
+
+## Performance study (Part 4)
+
+Run on the VM listed first in `hosts`, after `git pull && make` on every VM:
+
+    python3 scripts/perf_run.py --dry-run --pingpong results/pingpong/<folder>   # plan + time estimate
+    python3 scripts/perf_run.py --tag <network-name>                             # run everything
+    python3 scripts/perf_analyze.py results/perf/<folder> --pingpong results/pingpong/<folder>
+
+`perf_run.py` runs the three experiments of Section 8.2 of the brief (baseline,
+strong scaling with `--map-by node` and `--map-by slot`, weak scaling), each
+configuration `--reps` times (default 3), and appends every result immediately to
+`results/perf/<folder>/runs.csv` together with the exact command. A stopped session
+continues with `--resume <folder>`; a hung run is killed after `--timeout` seconds;
+after `--max-fail` failures in a row (default 5) it stops. `network.log` records
+`tailscale status` and the path of every pair at the start of each experiment.
+Write the network setup by hand into `<folder>/NETWORK.md`.
+
+| Option | Default | Meaning |
+|---|---|---|
+| `--exp` | `baseline strong weak` | which experiments |
+| `--steps` | 100 | steps for strong and weak scaling |
+| `--baseline-steps` | 500 | steps for the serial baseline |
+| `--reps` | 3 | repetitions of every configuration |
+| `--Ns` | `512 2048 8192` | strong-scaling grid sizes |
+| `--Ps` | 1 .. all slots | process counts |
+| `--weak-per` | 1024 | interior nodes per process = this² |
+| `--timeout` | 1800 | seconds before a run is killed |
+
+`perf_analyze.py` takes the median and spread of the repetitions and writes
+`analysis/summary.md` (all tables) and the plots: compute rate per VM, strong
+scaling (time per step, speed-up, efficiency, measured and model), weak scaling,
+communication share, and the model's prediction for a real cluster. The model is
+described at the top of the script.
