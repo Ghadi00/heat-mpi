@@ -1,0 +1,6 @@
+date: 2026-11-27T20:53:07+00:00
+launched from: heat-lynn
+hosts: heat-lynn heat-ghadi heat-rim
+same-VM btl: self,vader
+pingpong args: --max 4194304
+mpirun (Open MPI) 4.1.6

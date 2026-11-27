@@ -1,0 +1,6 @@
+pong from heat-rim (100.100.147.92) via DERP(lhr) in 461ms
+pong from heat-rim (100.100.147.92) via DERP(lhr) in 930ms
+pong from heat-rim (100.100.147.92) via DERP(lhr) in 352ms
+pong from heat-rim (100.100.147.92) via DERP(lhr) in 214ms
+pong from heat-rim (100.100.147.92) via DERP(lhr) in 350ms
+direct connection not established

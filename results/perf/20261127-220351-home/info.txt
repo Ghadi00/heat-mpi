@@ -1,0 +1,5 @@
+started 2026-11-27T22:03:51 on heat-lynn
+args: --tag home --exp strong weak --steps 50
+commit d6971e5
+hosts [('heat-lynn', 2), ('heat-ghadi', 2), ('heat-rim', 2)]
+Write the network setup (who was on which network, Wi-Fi or wired) in NETWORK.md.

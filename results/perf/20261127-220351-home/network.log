@@ -1,0 +1,83 @@
+
+===== start  2026-11-27T22:03:51
+100.91.244.125  heat-lynn   lynnmechreck1@  linux  -  
+100.116.44.49   heat-ghadi  ghadikriko12@   linux  -  
+100.100.147.92  heat-rim    abboudrim1@     linux  -  
+-- heat-lynn -> heat-ghadi
+pong from heat-ghadi (100.116.44.49) via DERP(par) in 168ms
+pong from heat-ghadi (100.116.44.49) via DERP(par) in 145ms
+direct connection not established
+-- heat-lynn -> heat-rim
+pong from heat-rim (100.100.147.92) via DERP(mad) in 763ms
+pong from heat-rim (100.100.147.92) via DERP(mad) in 317ms
+direct connection not established
+-- heat-ghadi -> heat-rim
+pong from heat-rim (100.100.147.92) via DERP(mad) in 586ms
+pong from heat-rim (100.100.147.92) via DERP(mad) in 293ms
+direct connection not established
+
+===== before weak  2026-11-27T22:19:01
+100.91.244.125  heat-lynn   lynnmechreck1@  linux  -                                                               
+100.116.44.49   heat-ghadi  ghadikriko12@   linux  active; direct 185.126.44.204:54805, tx 101294160 rx 100782272  
+100.100.147.92  heat-rim    abboudrim1@     linux  active; direct 94.187.15.237:3281, tx 31851328 rx 31077072      
+-- heat-lynn -> heat-ghadi
+pong from heat-ghadi (100.116.44.49) via 185.126.44.204:54805 in 42ms
+-- heat-lynn -> heat-rim
+pong from heat-rim (100.100.147.92) via 94.187.15.237:3281 in 65ms
+-- heat-ghadi -> heat-rim
+pong from heat-rim (100.100.147.92) via 94.187.15.237:3281 in 42ms
+
+===== before strong  2026-11-27T22:20:47
+100.91.244.125  heat-lynn   lynnmechreck1@  linux  -                                                               
+100.116.44.49   heat-ghadi  ghadikriko12@   linux  active; direct 185.126.44.204:54805, tx 113439324 rx 112892572  
+100.100.147.92  heat-rim    abboudrim1@     linux  active; direct 94.187.15.237:3281, tx 38558124 rx 37700172      
+-- heat-lynn -> heat-ghadi
+pong from heat-ghadi (100.116.44.49) via 185.126.44.204:54805 in 60ms
+-- heat-lynn -> heat-rim
+pong from heat-rim (100.100.147.92) via 94.187.15.237:3281 in 62ms
+-- heat-ghadi -> heat-rim
+pong from heat-rim (100.100.147.92) via 94.187.15.237:3281 in 75ms
+
+===== before weak  2026-11-27T22:33:22
+100.91.244.125  heat-lynn   lynnmechreck1@  linux  -                                                               
+100.116.44.49   heat-ghadi  ghadikriko12@   linux  active; direct 185.126.44.204:54805, tx 214801452 rx 213618740  
+100.100.147.92  heat-rim    abboudrim1@     linux  active; direct 94.187.15.237:3281, tx 70020620 rx 68768964      
+-- heat-lynn -> heat-ghadi
+pong from heat-ghadi (100.116.44.49) via 185.126.44.204:54805 in 33ms
+-- heat-lynn -> heat-rim
+pong from heat-rim (100.100.147.92) via 94.187.15.237:3281 in 63ms
+-- heat-ghadi -> heat-rim
+pong from heat-rim (100.100.147.92) via 94.187.15.237:3281 in 156ms
+
+===== before strong  2026-11-27T22:35:04
+100.91.244.125  heat-lynn   lynnmechreck1@  linux  -                                                               
+100.116.44.49   heat-ghadi  ghadikriko12@   linux  active; direct 185.126.44.204:54805, tx 226903480 rx 225727952  
+100.100.147.92  heat-rim    abboudrim1@     linux  active; direct 94.187.15.237:3281, tx 76673816 rx 75375008      
+-- heat-lynn -> heat-ghadi
+pong from heat-ghadi (100.116.44.49) via 185.126.44.204:54805 in 59ms
+-- heat-lynn -> heat-rim
+pong from heat-rim (100.100.147.92) via 94.187.15.237:3281 in 47ms
+-- heat-ghadi -> heat-rim
+pong from heat-rim (100.100.147.92) via 94.187.15.237:3281 in 135ms
+
+===== before weak  2026-11-27T22:48:26
+100.91.244.125  heat-lynn   lynnmechreck1@  linux  -                                                               
+100.116.44.49   heat-ghadi  ghadikriko12@   linux  active; direct 185.126.44.204:54805, tx 328422884 rx 326491828  
+100.100.147.92  heat-rim    abboudrim1@     linux  active; direct 94.187.15.237:3281, tx 108177144 rx 106409768    
+-- heat-lynn -> heat-ghadi
+pong from heat-ghadi (100.116.44.49) via 185.126.44.204:54805 in 41ms
+-- heat-lynn -> heat-rim
+pong from heat-rim (100.100.147.92) via 94.187.15.237:3281 in 98ms
+-- heat-ghadi -> heat-rim
+pong from heat-rim (100.100.147.92) via 94.187.15.237:3281 in 30ms
+
+===== end  2026-11-27T22:50:11
+100.91.244.125  heat-lynn   lynnmechreck1@  linux  -                                                               
+100.116.44.49   heat-ghadi  ghadikriko12@   linux  active; direct 185.126.44.204:54805, tx 340630968 rx 338622160  
+100.100.147.92  heat-rim    abboudrim1@     linux  active; direct 94.187.15.237:3281, tx 114906108 rx 113022964    
+-- heat-lynn -> heat-ghadi
+pong from heat-ghadi (100.116.44.49) via 185.126.44.204:54805 in 58ms
+-- heat-lynn -> heat-rim
+pong from heat-rim (100.100.147.92) via 94.187.15.237:3281 in 119ms
+-- heat-ghadi -> heat-rim
+pong from heat-rim (100.100.147.92) via 94.187.15.237:3281 in 133ms
