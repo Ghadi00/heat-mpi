@@ -2,13 +2,16 @@
 """perf_analyze.py -- tables, plots and the performance model for Part 4.
 
 Usage:
-    python3 scripts/perf_analyze.py results/perf/<folder> \
+    python3 scripts/perf_analyze.py results/perf/<folder> [more folders ...] \
         --pingpong results/pingpong/<folder>        # t_s, t_w measured in Part 0
+    # several folders are combined, e.g. a baseline session and a scaling session;
+    # the output goes to the LAST folder's analysis/ (or --out)
     # or give the network parameters directly:
     python3 scripts/perf_analyze.py results/perf/<folder> --ts 0.07 --tw 4e-6
 
-Reads <folder>/runs.csv (written by perf_run.py), takes the MEDIAN of the repetitions
-of every configuration (and the min/max as the spread) and writes into <folder>/analysis/:
+Reads runs.csv of every folder (written by perf_run.py), takes the MEDIAN of the
+repetitions of every configuration (and the min/max as the spread) and writes into
+<last folder>/analysis/:
 
   summary.md                all tables: compute rate, strong and weak scaling with spread,
                             communication share, model parameters, model vs measurement,
@@ -16,24 +19,26 @@ of every configuration (and the min/max as the spread) and writes into <folder>/
   baseline.png              time per node per step on each VM (compute rate)
   strong_N<N>.png           time per step, speed-up S = T1/TP, efficiency E = S/P,
                             measured (markers, min-max bars) and model (dashed)
+                            T1 = serial run on the first host of the hostfile; the
+                            tables also give S_fast = (serial time per step on the
+                            FASTEST VM, from the baseline) / TP
   weak.png                  weak scaling: time per step vs P, measured and model
   comm_share.png            fraction of the time spent in the halo exchange
   real_cluster.png          model speed-up with t_s = 1 us, 10 GB/s (Section 8.3 question)
 
-THE MODEL (background notes, Task 8.2; time per step, slowest rank decides):
-  compute   t_node * (number of interior nodes of the biggest piece)
-            t_node = measured serial time per node per step, from the baseline
-            (the SLOWEST VM that takes part, since every rank waits for the slowest)
-  strips    + 2 * (t_s + 8 (N+1) t_w)                  for P > 1
-            two Sendrecv calls per step, each moves one row of N+1 doubles
-            (send and receive overlap, so one message time each)
-  blocks    + 2 * (t_s + 8 nx t_w)   if Py > 1   (rows, nx = widest block)
-            + 2 * (t_s + 8 ny t_w)   if Px > 1   (columns, ny = tallest block)
-  t_s, t_w: the cross-VM values from the ping-pong fit as soon as any neighbouring
-            ranks are on different VMs (the run used more than one VM: always with
-            --map-by node, with --map-by slot once P exceeds the first VM's slots),
-            the same-VM values otherwise.
-            With several VM pairs the WORST link is used (--link mean to average).
+THE MODEL (background notes, Task 8.2; time per step, the slowest rank decides):
+  Placement: rank k runs on the VM that Open MPI gives it (--map-by node: round-robin
+  over the hostfile; --map-by slot: fill each VM's slots before the next).
+  compute   max over ranks of  t_node(VM of the rank) * (interior nodes of its piece)
+            t_node = that VM's serial time per node per step, from the baseline
+  strips    + 2 phases (send up, send down), each one row of N+1 doubles:
+            phase time = max over neighbouring pairs (k, k+1) of  t_s + 8 (N+1) t_w
+  blocks    + 2 phases over vertical neighbours (rows of nx doubles)   if Py > 1
+            + 2 phases over horizontal neighbours (columns of ny doubles) if Px > 1
+  t_s, t_w of a pair: from the ping-pong fit for THAT pair of VMs (median round
+  trips), or the same-VM values when both ranks are on one VM.  A phase lasts as
+  long as its slowest pair, because every rank waits for its exchange to finish.
+  (--link worst charges every cross-VM pair at the worst measured link instead.)
 """
 import argparse
 import csv
@@ -54,7 +59,14 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 
 # ------------------------------------------------------------------ data --
-def load(folder):
+def load(folders):
+    rows = []
+    for folder in folders:
+        rows += load_one(folder)
+    return rows
+
+
+def load_one(folder):
     rows = []
     with open(os.path.join(folder, "runs.csv")) as f:
         for r in csv.DictReader(f):
@@ -95,11 +107,61 @@ def dims_create(P):
 
 # ----------------------------------------------------------------- model --
 class Model:
-    def __init__(self, tnode_by_host_N, net, local, slots_first, link="worst"):
+    def __init__(self, tnode_by_host_N, net, local, slots_first, link="worst",
+                 pairs=None, hosts=None):
         self.tnode = tnode_by_host_N     # {(host, N): seconds per node per step}
-        self.net = net                   # (ts, tw) across VMs
+        self.net = net                   # (ts, tw) across VMs (worst pair)
         self.local = local               # (ts, tw) within one VM
         self.slots_first = slots_first
+        self.pairs = pairs if link == "pair" else None   # {frozenset({a, b}): (ts, tw)}
+        self.hosts = hosts               # [(name, slots), ...] in hostfile order
+
+    def placement(self, mapping, P):
+        """VM of every rank, as Open MPI places them."""
+        names = [h for h, _ in self.hosts]
+        if mapping == "slot":
+            out = []
+            for h, s in self.hosts:
+                out += [h] * s
+            return out[:P]
+        out, used = [], {h: 0 for h in names}
+        slots = dict(self.hosts)
+        while len(out) < P:
+            for h in names:
+                if len(out) < P and used[h] < slots[h]:
+                    out.append(h)
+                    used[h] += 1
+        return out
+
+    def link_cost(self, a, b, nbytes, ts_tw=None):
+        if ts_tw is not None:
+            ts, tw = ts_tw
+        elif a == b:
+            ts, tw = self.local
+        else:
+            ts, tw = self.pairs.get(frozenset((a, b)), self.net)
+        return ts + nbytes * tw
+
+    def step_pairs(self, decomp, mapping, N, P, ts_tw=None):
+        where = self.placement(mapping, P)
+        if decomp == "strips":
+            comp = max(self.t_node(N, {where[k]}) * (N - 1) * split_count(k, N, P) for k in range(P))
+            phase = max(self.link_cost(where[k], where[k + 1], 8 * (N + 1), ts_tw) for k in range(P - 1))
+            return comp, 2 * phase
+        Px, Py = dims_create(P)
+        rank = lambda cx, cy: cx * Py + cy           # MPI_Cart_create, row-major
+        comp = max(self.t_node(N, {where[rank(cx, cy)]}) * split_count(cx, N, Px) * split_count(cy, N, Py)
+                   for cx in range(Px) for cy in range(Py))
+        comm = 0.0
+        if Py > 1:
+            comm += 2 * max(self.link_cost(where[rank(cx, cy)], where[rank(cx, cy + 1)],
+                                           8 * split_count(cx, N, Px), ts_tw)
+                            for cx in range(Px) for cy in range(Py - 1))
+        if Px > 1:
+            comm += 2 * max(self.link_cost(where[rank(cx, cy)], where[rank(cx + 1, cy)],
+                                           8 * split_count(cy, N, Py), ts_tw)
+                            for cx in range(Px - 1) for cy in range(Py))
+        return comp, comm
 
     def t_node(self, N, hosts):
         vals = [v for (h, n), v in self.tnode.items() if n == N and (not hosts or h in hosts)]
@@ -116,6 +178,8 @@ class Model:
         tn = self.t_node(N, hosts)
         if decomp == "serial" or P == 1:
             return tn * (N - 1) ** 2, 0.0
+        if self.pairs is not None and self.hosts and ts_tw is None:
+            return self.step_pairs(decomp, mapping, N, P)
         if ts_tw is None:
             # across VMs as soon as the run uses more than one VM; if that is
             # unknown, decide from the placement rule
@@ -152,6 +216,14 @@ def pingpong_params(folder, link):
     return net, loc, cross, same
 
 
+def pair_table(cross):
+    out = {}
+    for ts, tw, label in cross:
+        a, _, b = label.partition("<->")
+        out[frozenset((a.strip(), b.strip()))] = (ts, tw)
+    return out
+
+
 # ---------------------------------------------------------------- output --
 def fmt_t(x):
     if x != x:
@@ -165,29 +237,32 @@ def fmt_t(x):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("folder")
+    ap.add_argument("folders", nargs="+", help="results/perf/<folder> ... (combined)")
+    ap.add_argument("--out", default=None, help="output folder (default: <last folder>/analysis)")
     ap.add_argument("--pingpong", help="ping-pong results folder (Part 0) for t_s and t_w")
     ap.add_argument("--ts", type=float, help="cross-VM latency [s] (instead of --pingpong)")
     ap.add_argument("--tw", type=float, help="cross-VM time per byte [s/B]")
-    ap.add_argument("--link", choices=["worst", "mean"], default="worst")
+    ap.add_argument("--link", choices=["pair", "worst", "mean"], default="pair",
+                    help="pair: each exchange at the speed of the VM pair doing it (default)")
     ap.add_argument("--hosts", default=None, help="hostfile used (default: ./hosts)")
     ap.add_argument("--real-ts", type=float, default=1e-6)
     ap.add_argument("--real-bw", type=float, default=10e9, help="bytes/s for the real-cluster prediction")
     a = ap.parse_args()
 
-    rows = load(a.folder)
+    rows = load(a.folders)
     if not rows:
         sys.exit("no successful runs in runs.csv")
-    out = os.path.join(a.folder, "analysis")
+    out = a.out or os.path.join(a.folders[-1], "analysis")
     os.makedirs(out, exist_ok=True)
     md = []
 
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     hostfile = a.hosts or os.path.join(root, "hosts")
-    slots_first = 2
+    slots_first, host_list = 2, None
     if os.path.exists(hostfile):
         from perf_run import read_hosts
-        slots_first = read_hosts(hostfile)[0][1]
+        host_list = read_hosts(hostfile)
+        slots_first = host_list[0][1]
 
     # ---- baseline: compute rate per VM
     base = group([r for r in rows if r["exp"] == "baseline"], ["host", "N"])
@@ -235,17 +310,26 @@ def main():
     # ---- model parameters
     model = None
     if a.pingpong or (a.ts is not None and a.tw is not None):
+        pairs, cross = None, []
         if a.pingpong:
-            net, loc, cross, same = pingpong_params(a.pingpong, a.link)
-            src = f"ping-pong folder `{a.pingpong}`, {a.link} cross-VM pair"
+            net, loc, cross, same = pingpong_params(a.pingpong, "mean" if a.link == "mean" else "worst")
+            pairs = pair_table(cross)
+            src = f"ping-pong folder `{a.pingpong}`"
         else:
             net, loc, src = (a.ts, a.tw), (5e-7, 1.5e-10), "command line"
-        model = Model(tnode, net, loc, slots_first, a.link)
-        md += ["## Model parameters", "",
-               f"* t_s, t_w across VMs: {fmt_t(net[0])}, {net[1]:.3e} s/B "
-               f"(bandwidth {1 / net[1] / 1e6:.3f} MB/s), from {src}",
-               f"* t_s, t_w within a VM: {fmt_t(loc[0])}, {loc[1]:.3e} s/B",
-               "* t_node: median serial time per node per step from the baseline, slowest VM taking part", ""]
+        link = a.link if pairs else "worst"
+        model = Model(tnode, net, loc, slots_first, link, pairs, host_list)
+        md += ["## Model parameters", "", f"Network from {src}; model mode `{link}`.", ""]
+        if link == "pair":
+            md += ["| VM pair | t_s | t_w | bandwidth |", "|---|---|---|---|"]
+            for ts, tw, label in cross:
+                md.append(f"| {label} | {fmt_t(ts)} | {tw:.3e} s/B | {1 / tw / 1e6:.3f} MB/s |")
+            md.append("")
+        else:
+            md.append(f"* t_s, t_w across VMs: {fmt_t(net[0])}, {net[1]:.3e} s/B "
+                      f"(bandwidth {1 / net[1] / 1e6:.3f} MB/s)")
+        md += [f"* t_s, t_w within a VM: {fmt_t(loc[0])}, {loc[1]:.3e} s/B",
+               "* t_node of each VM: median serial time per node per step from the baseline (table 1)", ""]
 
     # ---- strong scaling
     strong = [r for r in rows if r["exp"] == "strong"]
@@ -254,15 +338,22 @@ def main():
                "Time per step (median, spread min–max), speed-up S = T1/TP, efficiency E = S/P, "
                "communication share t_comm/t_total. T1 = serial run on the first host.", ""]
         g = group(strong, ["decomp", "map", "N", "P"])
+        fastest = {}   # N -> (per-step time, host) of the fastest VM in the baseline
+        for (h, N), rs in base.items():
+            t = stats(rs)[0]
+            if N not in fastest or t < fastest[N][0]:
+                fastest[N] = (t, h)
         for N in sorted({r["N"] for r in strong}):
             t1runs = g.get(("serial", "-", N, 1))
             if not t1runs:
                 continue
             T1 = stats(t1runs)[0]
-            md += [f"### N = {N}  (T1 = {fmt_t(T1)} per step)", "",
-                   "| decomp | map | P | time/step (spread) | S | E | comm share |" +
-                   (" model time/step | model S |" if model else ""),
-                   "|---|---|---|---|---|---|---|" + ("---|---|" if model else "")]
+            Tf = fastest.get(N)
+            md += [f"### N = {N}  (T1 = {fmt_t(T1)} per step on {t1runs[0]['host']}" +
+                   (f"; fastest VM {Tf[1]}: {fmt_t(Tf[0])} per step" if Tf else "") + ")", "",
+                   "| decomp | map | P | time/step (spread) | S | E |" + (" S_fast |" if Tf else "") +
+                   " comm share |" + (" model time/step | model S |" if model else ""),
+                   "|---|---|---|---|---|---|" + ("---|" if Tf else "") + "---|" + ("---|---|" if model else "")]
             fig, axs = plt.subplots(1, 3, figsize=(15, 4.3))
             series = sorted({(r["decomp"], r["map"]) for r in strong if r["decomp"] != "serial"})
             colors = {("strips", "node"): "C0", ("strips", "slot"): "C1",
@@ -278,7 +369,7 @@ def main():
                     S.append(T1 / mm_); E.append(T1 / mm_ / P)
                     share = statistics.median(r["t_comm"] / r["t_total"] for r in rs) if P > 1 else 0.0
                     line = f"| {d if P > 1 else 'serial'} | {m if P > 1 else '-'} | {P} | {fmt_t(mm_)} ({fmt_t(l_)}–{fmt_t(h_)}) | {T1 / mm_:.2f} | " \
-                           f"{T1 / mm_ / P:.2f} | {share:.0%} |"
+                           f"{T1 / mm_ / P:.2f} |" + (f" {Tf[0] / mm_:.2f} |" if Tf else "") + f" {share:.0%} |"
                     if model:
                         used = set(rs[0]["hosts_used"].split())
                         c, k = model.step(d if P > 1 else "serial", m, N, P, used)
@@ -338,7 +429,7 @@ def main():
         # crossover summary
         md += ["### Does spreading across VMs pay off?", "",
                "Best measured speed-up per N (any decomposition and placement, P > 1):", "",
-               "| N | best S | at | model best S |", "|---|---|---|---|"]
+               "| N | best S | best S_fast | at | model best S |", "|---|---|---|---|---|"]
         for N in sorted({r["N"] for r in strong}):
             t1 = g.get(("serial", "-", N, 1))
             if not t1:
@@ -353,7 +444,9 @@ def main():
                          for k, rs in g.items() if k[2] == N and k[3] > 1)
                 mb = f"{mb[0]:.2f} ({mb[1][0]}, {mb[1][1]}, P={mb[1][3]})"
             if best[1]:
-                md.append(f"| {N} | {best[0]:.2f} | {best[1][0]}, map-by {best[1][1]}, P={best[1][3]} | {mb} |")
+                Tf = fastest.get(N)
+                sf = f"{Tf[0] / stats(g[best[1]])[0]:.2f}" if Tf else "—"
+                md.append(f"| {N} | {best[0]:.2f} | {sf} | {best[1][0]}, map-by {best[1][1]}, P={best[1][3]} | {mb} |")
         md.append("")
 
     # ---- weak scaling
@@ -432,9 +525,11 @@ def main():
         plt.close(fig)
 
     failed = 0
-    with open(os.path.join(a.folder, "runs.csv")) as f:
-        failed = sum(1 for r in csv.DictReader(f) if r["ok"] != "1")
-    head = [f"# Performance results: `{os.path.basename(os.path.normpath(a.folder))}`", "",
+    for folder in a.folders:
+        with open(os.path.join(folder, "runs.csv")) as f:
+            failed += sum(1 for r in csv.DictReader(f) if r["ok"] != "1")
+    names = ", ".join(f"`{os.path.basename(os.path.normpath(x))}`" for x in a.folders)
+    head = [f"# Performance results: {names}", "",
             f"{len(rows)} successful runs" + (f", {failed} failed (see runs.csv)" if failed else "") + ".", ""]
     with open(os.path.join(out, "summary.md"), "w") as f:
         f.write("\n".join(head + md) + "\n")

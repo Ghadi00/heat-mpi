@@ -1,0 +1,18 @@
+date: 2026-11-27T20:48:35+00:00
+where: cluster (heat-lynn heat-ghadi heat-rim)
+commit: 3099888
+cases=[2] N=[17] P=[1 2 3 4 6] decomps=[strips blocks] halos=[shift] steps=5 r=0.24
+
+case  N     decomp   halo   P   result
+2     17    strips   shift  1   IDENTICAL
+2     17    strips   shift  2   IDENTICAL
+2     17    strips   shift  3   IDENTICAL
+2     17    strips   shift  4   IDENTICAL
+2     17    strips   shift  6   IDENTICAL
+2     17    blocks   -      1   IDENTICAL
+2     17    blocks   -      2   IDENTICAL
+2     17    blocks   -      3   IDENTICAL
+2     17    blocks   -      4   IDENTICAL
+2     17    blocks   -      6   IDENTICAL
+
+passed: 10   failed: 0

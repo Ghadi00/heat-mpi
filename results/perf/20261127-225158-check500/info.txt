@@ -1,0 +1,5 @@
+started 2026-11-27T22:51:58 on heat-lynn
+args: --tag check500 --exp strong --Ns 2048 --Ps 1 2 3 --decomps strips --steps 500
+commit eb71f75
+hosts [('heat-lynn', 2), ('heat-ghadi', 2), ('heat-rim', 2)]
+Write the network setup (who was on which network, Wi-Fi or wired) in NETWORK.md.

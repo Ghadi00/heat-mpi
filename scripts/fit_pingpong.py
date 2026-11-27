@@ -8,6 +8,9 @@ For every *.csv file in the folder (one per pair of hosts) this prints
   * t_s  : latency, the mean one-way time of the small messages (m <= 1 KiB)
   * t_w  : time per byte, the least-squares slope of the one-way time over
            the large messages (m >= 1 MiB); bandwidth = 1 / t_w
+The one-way time is half the MEDIAN round trip by default, so that a single
+delayed round trip (a Wi-Fi hiccup, a relay switch) does not distort the
+fit; --stat mean uses half the average round trip instead.
 and writes
   * <folder>/summary.md   a table for the report
   * <folder>/pingpong.png one-way time vs message size, measured and model
@@ -39,9 +42,10 @@ def read_run(path):
     return label, np.atleast_1d(data)
 
 
-def fit(data):
+def fit(data, stat="median"):
     m = data["bytes"].astype(float)
-    t = data["oneway_avg_s"].astype(float)
+    t = (data["rtt_median_s"].astype(float) / 2.0) if stat == "median" \
+        else data["oneway_avg_s"].astype(float)
     small = m <= SMALL_MAX
     large = m >= LARGE_MIN
     ts = float(np.mean(t[small])) if small.any() else float("nan")
@@ -53,10 +57,13 @@ def fit(data):
 
 
 def main():
-    if len(sys.argv) != 2:
+    args = [x for x in sys.argv[1:] if not x.startswith("--stat")]
+    stat = "mean" if "--stat=mean" in sys.argv or ("--stat" in sys.argv and "mean" in sys.argv) else "median"
+    args = [x for x in args if x not in ("mean", "median")]
+    if len(args) != 1:
         print(__doc__)
         sys.exit(1)
-    folder = sys.argv[1]
+    folder = args[0]
     files = sorted(glob.glob(os.path.join(folder, "*.csv")))
     if not files:
         sys.exit(f"no .csv files in {folder}")
@@ -68,12 +75,13 @@ def main():
         if data.size == 0:
             print(f"skipping empty file {path}")
             continue
-        ts, tw = fit(data)
+        ts, tw = fit(data, stat)
         bw = 1.0 / tw / 1e6 if tw > 0 else float("nan")
         rows.append((label, ts, tw, bw))
 
         m = data["bytes"].astype(float)
-        line, = ax.loglog(m, data["oneway_avg_s"], "o", ms=4, label=label)
+        y = data["rtt_median_s"] / 2.0 if stat == "median" else data["oneway_avg_s"]
+        line, = ax.loglog(m, y, "o", ms=4, label=label)
         ax.loglog(m, ts + m * tw, "-", color=line.get_color(), lw=1, alpha=0.7)
 
     ax.set_xlabel("message size m [bytes]")

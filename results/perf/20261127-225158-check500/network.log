@@ -1,0 +1,22 @@
+
+===== start  2026-11-27T22:51:58
+100.91.244.125  heat-lynn   lynnmechreck1@  linux  -                                
+100.116.44.49   heat-ghadi  ghadikriko12@   linux  idle, tx 340637456 rx 338628864  
+100.100.147.92  heat-rim    abboudrim1@     linux  idle, tx 114906212 rx 113023284  
+-- heat-lynn -> heat-ghadi
+pong from heat-ghadi (100.116.44.49) via 185.126.44.204:54805 in 109ms
+-- heat-lynn -> heat-rim
+pong from heat-rim (100.100.147.92) via 94.187.15.237:3281 in 168ms
+-- heat-ghadi -> heat-rim
+pong from heat-rim (100.100.147.92) via 94.187.15.237:3281 in 165ms
+
+===== end  2026-11-27T22:59:56
+100.91.244.125  heat-lynn   lynnmechreck1@  linux  -                                                               
+100.116.44.49   heat-ghadi  ghadikriko12@   linux  active; direct 185.126.44.204:54805, tx 423311944 rx 420640848  
+100.100.147.92  heat-rim    abboudrim1@     linux  active; direct 94.187.15.237:3281, tx 115040548 rx 113129092    
+-- heat-lynn -> heat-ghadi
+pong from heat-ghadi (100.116.44.49) via 185.126.44.204:54805 in 44ms
+-- heat-lynn -> heat-rim
+pong from heat-rim (100.100.147.92) via 94.187.15.237:3281 in 135ms
+-- heat-ghadi -> heat-rim
+pong from heat-rim (100.100.147.92) via 94.187.15.237:3281 in 333ms
