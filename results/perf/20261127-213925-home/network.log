@@ -1,0 +1,28 @@
+
+===== start  2026-11-27T21:39:25
+100.91.244.125  heat-lynn   lynnmechreck1@  linux  -                              
+100.116.44.49   heat-ghadi  ghadikriko12@   linux  idle, tx 27576 rx 32152        
+100.100.147.92  heat-rim    abboudrim1@     linux  idle, tx 72685652 rx 65957584  
+-- heat-lynn -> heat-ghadi
+pong from heat-ghadi (100.116.44.49) via 185.126.44.204:56060 in 336ms
+-- heat-lynn -> heat-rim
+pong from heat-rim (100.100.147.92) via 94.187.15.237:3288 in 120ms
+-- heat-ghadi -> heat-rim
+pong from heat-rim (100.100.147.92) via 94.187.15.237:3288 in 72ms
+
+===== end  2026-11-27T21:52:45
+100.91.244.125  heat-lynn   lynnmechreck1@  linux  -                                             
+100.116.44.49   heat-ghadi  ghadikriko12@   linux  idle, tx 179200 rx 199752                     
+100.100.147.92  heat-rim    abboudrim1@     linux  active; relay "fra", tx 72832624 rx 66121916  
+-- heat-lynn -> heat-ghadi
+pong from heat-ghadi (100.116.44.49) via DERP(par) in 134ms
+pong from heat-ghadi (100.116.44.49) via DERP(par) in 190ms
+direct connection not established
+-- heat-lynn -> heat-rim
+pong from heat-rim (100.100.147.92) via DERP(fra) in 252ms
+pong from heat-rim (100.100.147.92) via DERP(fra) in 213ms
+direct connection not established
+-- heat-ghadi -> heat-rim
+pong from heat-rim (100.100.147.92) via DERP(fra) in 490ms
+pong from heat-rim (100.100.147.92) via DERP(fra) in 711ms
+direct connection not established

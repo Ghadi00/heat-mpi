@@ -1,0 +1,5 @@
+started 2026-11-27T21:39:25 on heat-lynn
+args: --tag home --exp baseline
+commit 3099888
+hosts [('heat-lynn', 2), ('heat-ghadi', 2), ('heat-rim', 2)]
+Write the network setup (who was on which network, Wi-Fi or wired) in NETWORK.md.
