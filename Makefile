@@ -1,22 +1,15 @@
-# Build everything with one command:  make
-# -ffp-contract=off is required by the project (no fused multiply-adds),
-# so results are bit-for-bit reproducible across machines.
-MPICXX   ?= mpicxx
-# OMPI_SKIP_MPICXX: skip Open MPI's deprecated C++ bindings (we use the C API).
-CXXFLAGS ?= -O3 -std=c++17 -ffp-contract=off -Wall -Wextra -DOMPI_SKIP_MPICXX
-BUILD    := build
+CXX       = mpicxx
+CXXFLAGS ?= -O2 -Wall -Wextra -std=c++17 -Isrc
+SRC      := $(shell find src -name '*.cpp')
+OBJ      := $(SRC:src/%.cpp=build/%.o)
 
-PROGRAMS := $(BUILD)/heat $(BUILD)/hello $(BUILD)/pingpong
+heat: $(OBJ)
+	$(CXX) $(CXXFLAGS) -o $@ $^
 
-all: $(PROGRAMS)
-
-$(BUILD)/%: src/%.cpp | $(BUILD)
-	$(MPICXX) $(CXXFLAGS) -o $@ $<
-
-$(BUILD):
-	mkdir -p $@
+build/%.o: src/%.cpp
+	@mkdir -p $(dir $@)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
-	rm -rf $(BUILD)
-
-.PHONY: all clean
+	rm -rf build heat
+.PHONY: clean
