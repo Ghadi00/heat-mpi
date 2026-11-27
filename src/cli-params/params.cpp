@@ -1,5 +1,5 @@
-#include "cli/params.hpp"
-#include "common/errors.hpp"
+#include "cli-params/params.hpp"
+#include "utilities/errors.hpp"
 #include "core/constants.hpp"
 #include <mpi.h>
 #include <cstdio>

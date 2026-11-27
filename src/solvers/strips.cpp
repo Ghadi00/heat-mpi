@@ -1,6 +1,6 @@
 #include "solvers/solvers.hpp"
-#include "common/errors.hpp"
-#include "common/timing.hpp"
+#include "utilities/errors.hpp"
+#include "utilities/timing.hpp"
 #include "core/initial.hpp"
 #include "core/kernel.hpp"
 #include "core/partition.hpp"

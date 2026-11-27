@@ -1,4 +1,4 @@
-#include "common/errors.hpp"
+#include "utilities/errors.hpp"
 #include <mpi.h>
 #include <cstdio>
 #include <cstdlib>

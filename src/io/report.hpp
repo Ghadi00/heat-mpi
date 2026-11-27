@@ -1,6 +1,6 @@
 #pragma once
-#include "cli/params.hpp"
-#include "common/timing.hpp"
+#include "cli-params/params.hpp"
+#include "utilities/timing.hpp"
 #include <mpi.h>
 #include <string>
 #include <vector>
